@@ -1,0 +1,13 @@
+[book]
+authors = ["imochoa"]
+language = "en"
+src = "src"
+title = "Talon Commands"
+
+[output.html]
+site-url = "talon.imochoa.com"
+additional-js = ["src/collapse-nav.js"]
+
+[output.html.fold]
+enable = true
+level = 2
