@@ -12,8 +12,9 @@ set shell := ["bash", "-euco", "pipefail"]
 _default:
     @just --choose
 
+# Render every generated mindmap (.puml) under src/ to .svg next to it
 render-plantuml:
-  plantuml -tsvg **/*.puml
+  find ./cheatsheets/src -name '*.puml' -exec plantuml -tsvg {} +
 
 build-book:
   mdbook clean ./cheatsheets
@@ -22,5 +23,6 @@ build-book:
 watch-book:
   mdbook serve ./cheatsheets
 
-copy-html-to-server: build-book render-plantuml
+# SVGs must exist in src/ before mdbook copies src/ into book/
+copy-html-to-server: render-plantuml build-book
   rsync -avczP --delete ./cheatsheets/book/ herbert:~/vps/podman/containers/systemd/nginx/mounts/talon
