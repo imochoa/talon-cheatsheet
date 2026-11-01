@@ -62,12 +62,14 @@ def escape_md(c: str) -> str:
     """
     Escape characters that are special in GFM tables.
 
-    Only `|` needs escaping, and only when the text is NOT inside a code span
-    (GFM treats `|` inside `` `...` `` as literal). `+` is not special here, so
-    escaping it just leaks a visible backslash. Backticks themselves are left
-    alone because callers wrap code in double backticks.
+    Only used for text NOT inside a code span (GFM treats `|` and `<` inside
+    `` `...` `` as literal). `|` would split the table cell, and `<` would let
+    captures such as `<number>` or `<phrase>` parse as raw HTML tags and vanish
+    from the rendered page. `+` is not special here, so escaping it just leaks a
+    visible backslash. Backticks themselves are left alone because callers wrap
+    code in double backticks.
     """
-    return c.replace("|", r"\|")
+    return c.replace("|", r"\|").replace("<", r"\<")
 
 
 def format_cmds_md(cmds: list[TalonMap]) -> str:
