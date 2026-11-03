@@ -116,16 +116,14 @@ under `[output.html]`, not `[book]`).
 
 ## Markdown escaping
 
-`escape_md` only escapes `|` (needed in the italic spoken-form column, where
-Talon alternation `|` would break the GFM table). It is **not** called for the
+`escape_md` only escapes `|` and `<` for the italic spoken-form column: Talon
+alternation `|` would break the GFM table, and an unescaped built-in capture
+such as `<number>` or `<phrase>` is a valid HTML tag name, so it would be
+emitted as raw HTML and disappear from the page. It is **not** called for the
 backend column, which is wrapped in double-backtick code spans — GFM already
 treats `|` and other punctuation as literal inside code spans, so escaping
 there only leaks visible backslashes (e.g. `status_bar\|4`). Do not re-add
 `+` or `` ` `` escaping to `escape_md`.
-
-Known unrelated warning: mdBook logs `unclosed HTML tag <number>/<phrase>`
-for some command backends that contain literal `<…>` in tables. These are
-cosmetic and do not fail the build.
 
 ## Development workflow
 
